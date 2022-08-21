@@ -2,6 +2,7 @@ import express from 'express';
 import { AppDataSource } from './core/data-source';
 import helloRouter from './routes/HelloRouter';
 import tasksRouter from './routes/tasks.router';
+import userRouter from './routes/users.router';
 
 class App {
     public express: express.Application;
@@ -31,6 +32,7 @@ class App {
     private routes() {
         this.router.use('/hello', helloRouter);
         this.router.use('/tasks', tasksRouter);
+        this.router.use('/users', userRouter);
         this.express.use(this.router);
     }
 }

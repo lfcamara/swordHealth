@@ -1,5 +1,5 @@
-import { IRepository } from "../../core/abstracts/generic.repository";
-import { TaskBusiness } from "../../core/entities/taks.entity";
+import { IRepository } from "../core/abstracts/generic.repository";
+import { TaskBusiness } from "../core/entities/taks.entity";
 
 export class TasksService {
     public constructor(private tasksRepository: IRepository<TaskBusiness.Task>) {}

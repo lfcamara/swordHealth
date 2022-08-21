@@ -1,6 +1,7 @@
 import { Repository } from "typeorm";
 import { IRepository } from "../core/abstracts/generic.repository";
 import { AppDataSource } from "../core/data-source";
+import { ApplicationError, ErrorTypes } from "../core/errors";
 
 export class EntityRepository<T> implements IRepository<T> {
     private repository: Repository<T>
@@ -10,11 +11,19 @@ export class EntityRepository<T> implements IRepository<T> {
     }
 
     async create(item: T): Promise<T> {
-        return this.repository.save(item);
+        try {
+            return await this.repository.save(item);
+        } catch (error: any) {
+            throw new ApplicationError(ErrorTypes.InternalError());
+        }   
     }
 
     async findAll(): Promise<T[]> {
-        return this.repository.find();
+        try {
+            return await this.repository.find();
+        } catch (error: any) {
+            throw new ApplicationError(ErrorTypes.NotFound());
+        }
     }
 
     async find(identifier: number): Promise<T> {
@@ -26,20 +35,22 @@ export class EntityRepository<T> implements IRepository<T> {
         
         return result;
         } catch (error) {
-            throw error;
+            throw new ApplicationError(ErrorTypes.NotFound());
         }
     }
 
     async update(input: any) {
-        // TODO: Validar affected e lancar erro caso nenhuma linha tenha sido alterada
         const result = await this.repository.update(input.id, input);
         if(result.affected == 0) {
-            throw new Error("Not Found");
+            throw new ApplicationError(ErrorTypes.NotFound());
         }
         return result;
     }
 
     async delete(id: string): Promise<void> {
-        await this.repository.delete(id)
+        const result = await this.repository.delete(id);
+        if(result.affected == 0) {
+            throw new ApplicationError(ErrorTypes.NotFound());
+        }
     }
 }

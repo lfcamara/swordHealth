@@ -1,5 +1,6 @@
 import { DataSource } from "typeorm";
 import { TaskBusiness } from "./entities/taks.entity";
+import { UserBusiness } from "./entities/user.entity";
 
 export const AppDataSource = new DataSource({
     type: "mysql",
@@ -10,6 +11,7 @@ export const AppDataSource = new DataSource({
     database: "swordhealth",
     synchronize: true,
     entities: [
-        TaskBusiness.Task
+        TaskBusiness.Task,
+        UserBusiness.User
     ]
 });

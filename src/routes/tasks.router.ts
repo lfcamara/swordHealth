@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { TasksController } from "../controllers/tasks/tasks.controller";
+import { TasksController } from "../controllers/tasks.controller";
 
 class TasksRouter {
     public router: Router;
