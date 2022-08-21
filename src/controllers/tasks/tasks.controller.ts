@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
 import { DataRepository } from "../../core/abstracts/generic.repository";
-import { Task } from "../../core/entities/taks.entity";
+import { TaskBusiness } from "../../core/entities/taks.entity";
 import { TasksService } from "../../services/tasks/tasks.service";
 
 export class TasksController {
     static async create(req: Request, res: Response) {
         try {
-            const input: Task.ICreate = req.body;
+            const input: TaskBusiness.ICreate = req.body;
             const tasksService = new TasksService(new DataRepository().tasks());
             const result = await tasksService.create(input);
             res.status(201).json(result);
@@ -17,9 +17,12 @@ export class TasksController {
 
     static async update(req: Request, res: Response) {
         try {
-            
+            const input: TaskBusiness.IUpdate = req.body;
+            const tasksService = new TasksService(new DataRepository().tasks());
+            const result = await tasksService.update(input);
+            res.send(result);
         } catch (error: any) {
-            
+            throw error;
         }
     }
 }

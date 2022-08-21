@@ -11,6 +11,7 @@ class TasksRouter {
 
     init() {
         this.router.post('/', TasksController.create);
+        this.router.patch('/', TasksController.update);
     }
 }
 

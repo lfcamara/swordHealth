@@ -1,11 +1,11 @@
 import { IRepository } from "../../core/abstracts/generic.repository";
-import { Task } from "../../core/entities/taks.entity";
+import { TaskBusiness } from "../../core/entities/taks.entity";
 
 export class TasksService {
-    public constructor(private tasksRepository: IRepository<Task.Model>) {}
+    public constructor(private tasksRepository: IRepository<TaskBusiness.Task>) {}
     
-    public async create(input: Task.ICreate): Promise<Task.Model> {
-        const newTask = Task.Model.compose(input);
+    public async create(input: TaskBusiness.ICreate): Promise<TaskBusiness.Task> {
+        const newTask = TaskBusiness.Task.compose(input);
         return this.tasksRepository.create(newTask);
     }
 
@@ -13,7 +13,7 @@ export class TasksService {
     //     return this.tasksRepository.find(id, Task.Model);
     // }
 
-    // public async update(id: number, input: Task.IUpdate): Promise<Task.Model> {
-    //     return this.tasksRepository.update(id, input); 
-    // }
+    public async update(input: TaskBusiness.IUpdate): Promise<TaskBusiness.Task> {
+        return this.tasksRepository.update(input); 
+    }
 }

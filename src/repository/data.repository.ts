@@ -20,8 +20,13 @@ export class EntityRepository<T> implements IRepository<T> {
         throw new Error("Method not implemented.");
     }
 
-    async update(id: number, item: T): Promise<T> {
-        throw new Error("Method not implemented.");
+    async update(input: any) {
+        return this.repository
+            .createQueryBuilder()
+            .update()
+            .set(input)
+            .where({id : input.id})
+            .execute()
     }
 
     async delete(id: string): Promise<void> {

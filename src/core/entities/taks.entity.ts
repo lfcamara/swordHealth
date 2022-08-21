@@ -1,6 +1,6 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
-export namespace Task {
+export namespace TaskBusiness {
     export enum Status {
         TODO = 'To Do',
         DONE = 'Done'
@@ -12,11 +12,12 @@ export namespace Task {
     }
 
     export interface IUpdate {
+        id: number
         summary?: string;
-        status?: Task.Status;
+        status?: TaskBusiness.Status;
     }
     @Entity()
-    export class Model {
+    export class Task {
         @PrimaryGeneratedColumn()
         id: number;
 
@@ -32,7 +33,7 @@ export namespace Task {
         summary: string
 
         @Column()
-        status: Task.Status = Task.Status.TODO
+        status: TaskBusiness.Status = TaskBusiness.Status.TODO
 
         @CreateDateColumn({
             name: 'created_at'
@@ -46,8 +47,8 @@ export namespace Task {
 
         private constructor() {}
 
-        public static compose(props: Task.ICreate): Task.Model {
-            let newTask = new Task.Model();
+        public static compose(props: TaskBusiness.ICreate): TaskBusiness.Task {
+            let newTask = new TaskBusiness.Task();
             newTask.summary = props.summary;
             newTask.ownerId = props.ownerId;
             return newTask;
