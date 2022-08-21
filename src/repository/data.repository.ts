@@ -8,12 +8,13 @@ export class EntityRepository<T> implements IRepository<T> {
     public constructor(private entity: any) {
         this.repository = AppDataSource.getRepository(entity);
     }
+
     async create(item: T): Promise<T> {
         return this.repository.save(item);
     }
 
     async findAll(): Promise<T[]> {
-        throw new Error("Method not implemented.");
+        return this.repository.find();
     }
 
     async find(id: number): Promise<T> {
@@ -21,12 +22,9 @@ export class EntityRepository<T> implements IRepository<T> {
     }
 
     async update(input: any) {
-        return this.repository
-            .createQueryBuilder()
-            .update()
-            .set(input)
-            .where({id : input.id})
-            .execute()
+        // TODO: Validar affected e lancar erro caso nenhuma linha tenha sido alterada
+        const result = await this.repository.update(input.id, input);
+        return result;
     }
 
     async delete(id: string): Promise<void> {

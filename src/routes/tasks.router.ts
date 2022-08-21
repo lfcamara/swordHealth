@@ -10,8 +10,10 @@ class TasksRouter {
     }
 
     init() {
+        //TODO: Validar dados de entrada utilizando express-validator
         this.router.post('/', TasksController.create);
         this.router.patch('/', TasksController.update);
+        this.router.get('/', TasksController.findAll);
     }
 }
 

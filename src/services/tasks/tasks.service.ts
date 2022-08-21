@@ -9,9 +9,13 @@ export class TasksService {
         return this.tasksRepository.create(newTask);
     }
 
-    // public find(id: number): Promise<Task.Model> {
-    //     return this.tasksRepository.find(id, Task.Model);
-    // }
+    public async findAll() {
+        return this.tasksRepository.findAll();
+    }
+
+    public async find(id: number) {
+        return this.tasksRepository.find(id);
+    }
 
     public async update(input: TaskBusiness.IUpdate): Promise<TaskBusiness.Task> {
         return this.tasksRepository.update(input); 

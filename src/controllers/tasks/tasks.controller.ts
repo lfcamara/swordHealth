@@ -20,7 +20,17 @@ export class TasksController {
             const input: TaskBusiness.IUpdate = req.body;
             const tasksService = new TasksService(new DataRepository().tasks());
             const result = await tasksService.update(input);
-            res.send(result);
+            res.status(200).json(result);
+        } catch (error: any) {
+            throw error;
+        }
+    }
+
+    static async findAll(req: Request, res: Response) {
+        try {
+            const tasksService = new TasksService(new DataRepository().tasks());
+            const result = await tasksService.findAll();
+            res.status(200).json(result);
         } catch (error: any) {
             throw error;
         }
