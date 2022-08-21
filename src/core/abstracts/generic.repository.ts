@@ -5,7 +5,7 @@ import { UserBusiness } from "../entities/user.entity";
 export interface IRepository<T> {
     create(item: T): Promise <T>;
     findAll(): Promise<T[]>;
-    find(id: number): Promise<T>;
+    find(filters: any): Promise<T>;
     update(input: any);
     delete(id: string): Promise<void>;
 }

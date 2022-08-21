@@ -7,7 +7,7 @@ export namespace TaskBusiness {
     }
 
     export interface ICreate {
-        ownerId: number;
+        userId: number;
         summary: string;
     }
 
@@ -50,7 +50,7 @@ export namespace TaskBusiness {
         public static compose(props: TaskBusiness.ICreate): TaskBusiness.Task {
             let newTask = new TaskBusiness.Task();
             newTask.summary = props.summary;
-            newTask.ownerId = props.ownerId;
+            newTask.ownerId = props.userId;
             return newTask;
         }
     }

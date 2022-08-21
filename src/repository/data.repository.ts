@@ -26,11 +26,11 @@ export class EntityRepository<T> implements IRepository<T> {
         }
     }
 
-    async find(identifier: number): Promise<T> {
+    async find(filters: any): Promise<T> {
         try {
             const result = await this.repository
             .createQueryBuilder()
-            .where({id: identifier})
+            .where(filters)
             .getOneOrFail();
         
         return result;

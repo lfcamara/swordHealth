@@ -6,7 +6,10 @@ import { TasksService } from "../services/tasks.service";
 export class TasksController {
     static async create(req: Request, res: Response) {
         try {
-            const input: TaskBusiness.ICreate = req.body;
+            const input: TaskBusiness.ICreate = {
+                userId: Number(req.get('userId')),
+                summary: req.body.summary
+            };
             const tasksService = new TasksService(new DataRepository().tasks());
             const result = await tasksService.create(input);
             res.status(201).json(result);
@@ -17,9 +20,12 @@ export class TasksController {
 
     static async update(req: Request, res: Response) {
         try {
-            const input: TaskBusiness.IUpdate = req.body;
+            const input: TaskBusiness.IUpdate = {
+                id: Number(req.params.id),
+                ...req.body
+            };
             const tasksService = new TasksService(new DataRepository().tasks());
-            const result = await tasksService.update(input);
+            const result = await tasksService.update(Number(req.get('userId')), input);
             res.status(200).json(result);
         } catch (error: any) {
             res.status(error.status).json(error);
