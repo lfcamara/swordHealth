@@ -2,6 +2,8 @@ import { IRepository } from "../core/abstracts/generic.repository";
 import { UserBusiness } from "../core/entities/user.entity";
 import crypto from 'crypto';
 import { ApplicationError, ErrorTypes } from "../core/errors";
+import { Request } from "express";
+import { AuthService } from "./auth.service";
 
 export class UsersService {
     public constructor(private usersRepository: IRepository<UserBusiness.User>) {}
@@ -25,17 +27,5 @@ export class UsersService {
 
     public async delete(id: string): Promise<void> {
         await this.usersRepository.delete(id);
-    }
-
-    public async login(username: string, password: string) {
-        const user = await this.find({ username: username });
-        const checked = this.validatePassword(user, password);
-    }
-
-    private validatePassword(user: UserBusiness.User, inputPassword: string) {
-        const cryptoPassword = crypto.createHash('sha256').update(inputPassword).digest('hex');
-        if(user.password != cryptoPassword) {
-            throw new ApplicationError(ErrorTypes.Unauthorized());
-        }
     }
 }
