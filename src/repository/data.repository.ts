@@ -39,12 +39,11 @@ export class EntityRepository<T> implements IRepository<T> {
         }
     }
 
-    async update(input: any) {
+    async update(input: any): Promise<void> {
         const result = await this.repository.update(input.id, input);
         if(result.affected == 0) {
             throw new ApplicationError(ErrorTypes.NotFound());
         }
-        return result;
     }
 
     async delete(id: string): Promise<void> {

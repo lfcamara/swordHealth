@@ -4,7 +4,7 @@ import { UserBusiness } from "../core/entities/user.entity";
 export class UsersService {
     public constructor(private usersRepository: IRepository<UserBusiness.User>) {}
     
-    public async create(input: UserBusiness.ICreateOrUpdate): Promise<UserBusiness.User> {
+    public async create(input: UserBusiness.ICreate): Promise<UserBusiness.User> {
         const newUser = UserBusiness.User.compose(input);
         return this.usersRepository.create(newUser);
     }
@@ -17,7 +17,7 @@ export class UsersService {
         return this.usersRepository.find(taskId);
     }
 
-    public async update(input: UserBusiness.ICreateOrUpdate): Promise<UserBusiness.User> {
+    public async update(input: UserBusiness.IUpdate): Promise<UserBusiness.User> {
         return this.usersRepository.update(input); 
     }
 

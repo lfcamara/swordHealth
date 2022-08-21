@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { DataRepository } from "../core/abstracts/generic.repository";
 import { TaskBusiness } from "../core/entities/taks.entity";
-import { TasksService } from "../services/tasks/tasks.service";
+import { TasksService } from "../services/tasks.service";
 
 export class TasksController {
     static async create(req: Request, res: Response) {

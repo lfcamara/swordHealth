@@ -1,4 +1,5 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import crypto from "crypto";
 
 export namespace UserBusiness {
     export enum Roles {
@@ -6,9 +7,16 @@ export namespace UserBusiness {
         TECH = 'Tech'
     }
 
-    export interface ICreateOrUpdate {
-        name: string,
-        role: UserBusiness.Roles
+    export interface ICreate {
+        username: string,
+        password: string,
+        role?: UserBusiness.Roles
+    }
+
+    export interface IUpdate {
+        username?: string,
+        password?: string,
+        role?: UserBusiness.Roles
     }
 
     @Entity()
@@ -17,7 +25,10 @@ export namespace UserBusiness {
         id: number;
 
         @Column()
-        name: string
+        username: string
+        
+        @Column()
+        password: string
 
         @Column()
         role: UserBusiness.Roles
@@ -34,10 +45,11 @@ export namespace UserBusiness {
 
         private constructor() {}
 
-        public static compose(props: UserBusiness.ICreateOrUpdate): UserBusiness.User {
+        public static compose(props: UserBusiness.ICreate): UserBusiness.User {
             let newUser = new UserBusiness.User();
-            newUser.name = props.name;
-            newUser.role = props.role;
+            newUser.username = props.username;
+            newUser.password = crypto.createHash('sha256').update(props.password).digest('hex');
+            newUser.role = props.role ? props.role : UserBusiness.Roles.TECH;
             return newUser;
         }
     }  

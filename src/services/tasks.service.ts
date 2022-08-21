@@ -13,12 +13,13 @@ export class TasksService {
         return this.tasksRepository.findAll();
     }
 
-    public async find(taskId: number) {
-        return this.tasksRepository.find(taskId);
+    public async find(userId: number) {
+        return this.tasksRepository.find(userId);
     }
 
     public async update(input: TaskBusiness.IUpdate): Promise<TaskBusiness.Task> {
-        return this.tasksRepository.update(input); 
+        await this.tasksRepository.update(input); 
+        return this.find(input.id);
     }
 
     public async delete(id: string): Promise<void> {

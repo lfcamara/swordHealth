@@ -6,9 +6,10 @@ import { UsersService } from "../services/users.service";
 export class UsersController {
     static async create(req: Request, res: Response) {
         try {
-            const input: UserBusiness.ICreateOrUpdate = req.body;
+            const input: UserBusiness.ICreate = req.body;
             const usersService = new UsersService(new DataRepository().users());
             const result = await usersService.create(input);
+            delete result.password;
             res.status(201).json(result);
         } catch (error: any) {
             res.status(error.status).json(error);
@@ -17,7 +18,7 @@ export class UsersController {
 
     static async update(req: Request, res: Response) {
         try {
-            const input: UserBusiness.ICreateOrUpdate = req.body;
+            const input: UserBusiness.IUpdate = req.body;
             const usersService = new UsersService(new DataRepository().users());
             const result = await usersService.update(input);
             res.status(200).json(result);
