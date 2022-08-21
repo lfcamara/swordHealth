@@ -1,6 +1,5 @@
 import express from 'express';
-import { DataSource } from 'typeorm';
-import { Task } from './core/entities/taks.entity';
+import { AppDataSource } from './core/data-source';
 import helloRouter from './routes/HelloRouter';
 import tasksRouter from './routes/tasks.router';
 
@@ -22,19 +21,6 @@ class App {
     }
 
     private database() {
-        const AppDataSource = new DataSource({
-            type: "mysql",
-            host: "localhost",
-            port: 3306,
-            username: "root",
-            password: "mysql",
-            database: "swordhealth",
-            synchronize: true,
-            entities: [
-                Task
-            ]
-        });
-
         AppDataSource.initialize().then(() => {
             console.log("App connected to database");
         }).catch((error) => {

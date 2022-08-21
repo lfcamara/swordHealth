@@ -1,20 +1,30 @@
-import { BaseEntity } from "typeorm";
+import { Repository } from "typeorm";
 import { IRepository } from "../core/abstracts/generic.repository";
+import { AppDataSource } from "../core/data-source";
 
-export class Repository<T extends BaseEntity> implements IRepository<T> {
+export class EntityRepository<T> implements IRepository<T> {
+    private repository: Repository<T>
+
+    public constructor(private entity: any) {
+        this.repository = AppDataSource.getRepository(entity);
+    }
     async create(item: T): Promise<T> {
-        return item.save();
+        return this.repository.save(item);
     }
-    findAll(): Promise<T[]> {
+
+    async findAll(): Promise<T[]> {
         throw new Error("Method not implemented.");
     }
-    find(id: string): Promise<T> {
+
+    async find(id: number): Promise<T> {
         throw new Error("Method not implemented.");
     }
-    update(id: string, item: T): Promise<T> {
+
+    async update(id: number, item: T): Promise<T> {
         throw new Error("Method not implemented.");
     }
-    delete(id: string): Promise<void> {
+
+    async delete(id: string): Promise<void> {
         throw new Error("Method not implemented.");
     }
 }

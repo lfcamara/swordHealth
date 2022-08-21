@@ -1,4 +1,5 @@
 import { DataSource } from "typeorm";
+import { Task } from "./entities/taks.entity";
 
 export const AppDataSource = new DataSource({
     type: "mysql",
@@ -9,7 +10,6 @@ export const AppDataSource = new DataSource({
     database: "swordhealth",
     synchronize: true,
     entities: [
-        "../entities/*.ts",
-        "../../dist/src/entities/*.js"
+        Task.Model
     ]
-})
+});
