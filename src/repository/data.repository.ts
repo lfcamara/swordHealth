@@ -17,13 +17,25 @@ export class EntityRepository<T> implements IRepository<T> {
         return this.repository.find();
     }
 
-    async find(id: number): Promise<T> {
-        throw new Error("Method not implemented.");
+    async find(identifier: number): Promise<T> {
+        try {
+            const result = await this.repository
+            .createQueryBuilder()
+            .where({id: identifier})
+            .getOneOrFail();
+        
+        return result;
+        } catch (error) {
+            throw error;
+        }
     }
 
     async update(input: any) {
         // TODO: Validar affected e lancar erro caso nenhuma linha tenha sido alterada
         const result = await this.repository.update(input.id, input);
+        if(result.affected == 0) {
+            throw new Error("Not Found");
+        }
         return result;
     }
 

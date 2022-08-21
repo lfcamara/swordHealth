@@ -13,8 +13,8 @@ export class TasksService {
         return this.tasksRepository.findAll();
     }
 
-    public async find(id: number) {
-        return this.tasksRepository.find(id);
+    public async find(taskId: number) {
+        return this.tasksRepository.find(taskId);
     }
 
     public async update(input: TaskBusiness.IUpdate): Promise<TaskBusiness.Task> {

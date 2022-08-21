@@ -26,6 +26,16 @@ export class TasksController {
         }
     }
 
+    static async find(req: Request, res: Response) {
+        try {
+            const tasksService = new TasksService(new DataRepository().tasks());
+            const result = await tasksService.find(Number(req.params.id));
+            res.send(result);
+        } catch (error: any) {
+            throw error;
+        }
+    }
+
     static async findAll(req: Request, res: Response) {
         try {
             const tasksService = new TasksService(new DataRepository().tasks());
