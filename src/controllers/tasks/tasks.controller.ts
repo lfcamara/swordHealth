@@ -35,4 +35,14 @@ export class TasksController {
             throw error;
         }
     }
+
+    static async delete(req: Request, res: Response) {
+        try {
+            const tasksService = new TasksService(new DataRepository().tasks());
+            await tasksService.delete(req.params.id);
+            res.status(204);
+        } catch (error: any) {
+            throw error;
+        }
+    }
 }

@@ -28,6 +28,6 @@ export class EntityRepository<T> implements IRepository<T> {
     }
 
     async delete(id: string): Promise<void> {
-        throw new Error("Method not implemented.");
+        await this.repository.delete(id)
     }
 }

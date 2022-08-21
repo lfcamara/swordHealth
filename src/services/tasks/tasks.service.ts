@@ -20,4 +20,8 @@ export class TasksService {
     public async update(input: TaskBusiness.IUpdate): Promise<TaskBusiness.Task> {
         return this.tasksRepository.update(input); 
     }
+
+    public async delete(id: string): Promise<void> {
+        await this.tasksRepository.delete(id);
+    }
 }
