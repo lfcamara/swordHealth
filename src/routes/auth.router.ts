@@ -13,7 +13,7 @@ class AuthRouter {
     }
 
     init() {
-        this.router.get('/login', 
+        this.router.post('/login', 
             body('username').isString(),
             body('password').isString(),
             RequestValidation.validateRequest,

@@ -7,6 +7,8 @@ services:
     environment:
       MYSQL_DATABASE: swordhealth
       MYSQL_ROOT_PASSWORD: mysql
+      MYSQL_ROOT_USER: root
+      MYSQL_PASSWORD: "mysql"
     ports:
       - "3306:3306"
   adminer:
@@ -15,3 +17,18 @@ services:
     restart: always
     ports:
       - 8080:8080
+  app:
+    container_name: swordhealth
+    restart: always
+    build: .
+    ports:
+      - 3333:3333
+    environment:
+      DB_HOST: mysqldb
+      DB_PORT: 3306
+      DB_USERNAME: "root"
+      DB_PASSWORD: "mysql"
+      DB_DATABASE: "swordhealth"
+    links:
+      - mysqldb
+  

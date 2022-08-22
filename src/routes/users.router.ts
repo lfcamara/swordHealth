@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { body, header } from "express-validator";
 import { UsersController } from "../controllers/users.controller";
+import { AuthMiddleware } from "../middlewares/auth.middleware";
 import { RequestValidation } from "../middlewares/request.validation.middleware";
 
 class UserRouter {
@@ -12,19 +13,33 @@ class UserRouter {
     }
 
     init() {
-        //TODO: Validar autenticacao
-        this.router.get('/', UsersController.findAll);
-        this.router.get('/:id', UsersController.find);
+        this.router.get('/:id', 
+            AuthMiddleware.checkPermissions,
+            UsersController.find
+        );
+        this.router.get('/',
+            AuthMiddleware.checkPermissions,
+            UsersController.findAll
+        );
         this.router.post('/', 
-            body('username').exists(),
-            body('password').isLength({ min: 5 }),
+            body('username').isString(),
+            body('password').isString().isLength({ min: 5 }),
+            AuthMiddleware.checkPermissions,
             RequestValidation.validateRequest,
-            UsersController.create);
-        this.router.patch('/', 
-            (body('username') || body('password') || body('role')).exists(),
+            UsersController.create
+        );
+        this.router.patch('/:id', 
+            body('username').optional().isString(),
+            body('password').optional().isString(),
+            body('role').optional().isString(),
+            AuthMiddleware.checkPermissions,
             RequestValidation.validateRequest,
-            UsersController.update);
-        this.router.delete('/:id', UsersController.delete);
+            UsersController.update
+        );
+        this.router.delete('/:id', 
+            AuthMiddleware.checkPermissions,
+            UsersController.delete
+        );
     }
 }
 

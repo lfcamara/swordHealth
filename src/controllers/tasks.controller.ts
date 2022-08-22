@@ -7,11 +7,12 @@ export class TasksController {
     static async create(req: Request, res: Response) {
         try {
             const input: TaskBusiness.ICreate = {
-                userId: Number(req.get('userId')),
+                userId: req.session.userId,
                 summary: req.body.summary
             };
             const tasksService = new TasksService(new DataRepository().tasks());
             const result = await tasksService.create(input);
+            delete result.user.password;
             res.status(201).json(result);
         } catch (error: any) {
             res.status(error.status).json(error);
@@ -25,7 +26,7 @@ export class TasksController {
                 ...req.body
             };
             const tasksService = new TasksService(new DataRepository().tasks());
-            const result = await tasksService.update(Number(req.get('userId')), input);
+            const result = await tasksService.update(req.session.userId, input);
             res.status(200).json(result);
         } catch (error: any) {
             res.status(error.status).json(error);
@@ -35,7 +36,7 @@ export class TasksController {
     static async find(req: Request, res: Response) {
         try {
             const tasksService = new TasksService(new DataRepository().tasks());
-            const result = await tasksService.find(Number(req.params.id));
+            const result = await tasksService.find({ id: Number(req.params.id) });
             res.send(result);
         } catch (error: any) {
             res.status(error.status).json(error);
@@ -47,6 +48,16 @@ export class TasksController {
             const tasksService = new TasksService(new DataRepository().tasks());
             const result = await tasksService.findAll();
             res.status(200).json(result);
+        } catch (error: any) {
+            res.status(error.status).json(error);
+        }
+    }
+
+    static async findUserTasks(req: Request, res: Response) {
+        try {
+            const tasksService = new TasksService(new DataRepository().tasks());
+            const result = await tasksService.find({ ownerId: req.session.userId });
+            res.send(result);
         } catch (error: any) {
             res.status(error.status).json(error);
         }

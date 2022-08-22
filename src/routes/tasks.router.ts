@@ -13,21 +13,29 @@ class TasksRouter {
     }
 
     init() {
-        this.router.get('/', 
+        this.router.get('/all', 
             AuthMiddleware.checkPermissions,
             TasksController.findAll
         );
         this.router.get('/:id', TasksController.find);
+        this.router.get('/', 
+            AuthMiddleware.checkPermissions,
+            TasksController.findUserTasks
+        );
         this.router.post('/',
             body('summary').isString().isLength({ min: 1, max: 2500 }),
             RequestValidation.validateRequest,
-            TasksController.create);
+            TasksController.create
+        );
         this.router.patch('/:id',
-            (body('summary') || body('status')).isString(),
+            body('summary').optional().isString(), 
+            body('status').optional().isString(),
             RequestValidation.validateRequest, 
             TasksController.update);
         this.router.delete('/:id',
-            TasksController.delete);
+            AuthMiddleware.checkPermissions,
+            TasksController.delete
+        );
     }
 }
 

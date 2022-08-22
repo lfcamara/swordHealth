@@ -6,7 +6,7 @@ export interface IRepository<T> {
     create(item: T): Promise <T>;
     findAll(): Promise<T[]>;
     find(filters: any): Promise<T>;
-    update(input: any);
+    update(id: number, input: any);
     delete(id: string): Promise<void>;
 }
 

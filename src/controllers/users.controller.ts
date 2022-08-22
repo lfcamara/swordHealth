@@ -20,7 +20,7 @@ export class UsersController {
         try {
             const input: UserBusiness.IUpdate = req.body;
             const usersService = new UsersService(new DataRepository().users());
-            const result = await usersService.update(input);
+            const result = await usersService.update(Number(req.params.id), input);
             res.status(200).json(result);
         } catch (error: any) {
             res.status(error.status).json(error);

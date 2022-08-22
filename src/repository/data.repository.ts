@@ -31,6 +31,7 @@ export class EntityRepository<T> implements IRepository<T> {
             const result = await this.repository
             .createQueryBuilder()
             .where(filters)
+            .loadAllRelationIds()
             .getOneOrFail();
         
         return result;
@@ -39,8 +40,8 @@ export class EntityRepository<T> implements IRepository<T> {
         }
     }
 
-    async update(input: any): Promise<void> {
-        const result = await this.repository.update(input.id, input);
+    async update(userId: number, input: any): Promise<void> {
+        const result = await this.repository.update(userId, input);
         if(result.affected == 0) {
             throw new ApplicationError(ErrorTypes.NotFound());
         }

@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { UserBusiness } from "./user.entity";
 
 export namespace TaskBusiness {
     export enum Status {
@@ -9,6 +10,7 @@ export namespace TaskBusiness {
     export interface ICreate {
         userId: number;
         summary: string;
+        user? :UserBusiness.User
     }
 
     export interface IUpdate {
@@ -21,11 +23,10 @@ export namespace TaskBusiness {
         @PrimaryGeneratedColumn()
         id: number;
 
-        //TODO: Relation with user
-        @Column({
-            name: 'owner_id'
+        @ManyToOne(() => UserBusiness.User, (user) => user.tasks, {
+            cascade: true,
         })
-        ownerId: number
+        user: UserBusiness.User
 
         @Column({
             length: 2500
@@ -50,7 +51,7 @@ export namespace TaskBusiness {
         public static compose(props: TaskBusiness.ICreate): TaskBusiness.Task {
             let newTask = new TaskBusiness.Task();
             newTask.summary = props.summary;
-            newTask.ownerId = props.userId;
+            newTask.user = props.user;
             return newTask;
         }
     }

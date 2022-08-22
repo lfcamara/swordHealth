@@ -1,5 +1,6 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import crypto from "crypto";
+import { TaskBusiness } from "./taks.entity";
 
 export namespace UserBusiness {
     export enum Roles {
@@ -32,6 +33,11 @@ export namespace UserBusiness {
 
         @Column()
         role: UserBusiness.Roles
+
+        @OneToMany(() => TaskBusiness.Task, (task) => task.user, {
+            eager: true,
+        })
+        tasks: TaskBusiness.Task[]
 
         @CreateDateColumn({
             name: 'created_at'
