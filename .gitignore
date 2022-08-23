@@ -6,4 +6,5 @@ tmp/
 temp/
 dist/
 logs.log
-coverage
+coverage/
+.rabbitmq_data/

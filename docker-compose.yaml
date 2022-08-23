@@ -29,19 +29,19 @@ services:
     environment:
       - RABBITMQ_DEFAULT_USER=admin
       - RABBITMQ_DEFAULT_PASS=admin
-  # app:
-  #   container_name: swordhealth
-  #   restart: always
-  #   build: .
-  #   ports:
-  #     - 3333:3333
-  #   environment:
-  #     DB_HOST: mysqldb
-  #     DB_PORT: 3306
-  #     DB_USERNAME: "root"
-  #     DB_PASSWORD: "mysql"
-  #     DB_DATABASE: "swordhealth"
-  #   links:
-  #     - mysqldb
+  app:
+    container_name: swordhealth
+    restart: always
+    build: .
+    ports:
+      - 3333:3333
+    environment:
+      DB_HOST: mysqldb
+      DB_PORT: 3306
+      DB_USERNAME: "root"
+      DB_PASSWORD: "mysql"
+      DB_DATABASE: "swordhealth"
+    links:
+      - mysqldb
   
   
