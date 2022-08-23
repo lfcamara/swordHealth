@@ -20,7 +20,10 @@ export class EntityRepository<T> implements IRepository<T> {
 
     async findAll(): Promise<T[]> {
         try {
-            return await this.repository.find();
+            const result = await this.repository.find();
+            if (result.length == 0) throw Error;
+
+            return result;
         } catch (error: any) {
             throw new ApplicationError(ErrorTypes.NotFound());
         }
@@ -47,7 +50,7 @@ export class EntityRepository<T> implements IRepository<T> {
         }
     }
 
-    async delete(id: string): Promise<void> {
+    async delete(id: number): Promise<void> {
         const result = await this.repository.delete(id);
         if(result.affected == 0) {
             throw new ApplicationError(ErrorTypes.NotFound());

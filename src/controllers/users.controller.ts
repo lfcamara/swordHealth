@@ -50,7 +50,7 @@ export class UsersController {
     static async delete(req: Request, res: Response) {
         try {
             const usersService = new UsersService(new DataRepository().users());
-            await usersService.delete(req.params.id);
+            await usersService.delete(Number(req.params.id));
             res.status(204).send();
         } catch (error: any) {
             res.status(error.status).json(error);

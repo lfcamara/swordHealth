@@ -1,24 +1,34 @@
-import { DataRepository, IRepository } from "../core/abstracts/generic.repository";
+import { IRepository } from "../core/abstracts/generic.repository";
 import { TaskBusiness } from "../core/entities/taks.entity";
 import { ApplicationError, ErrorTypes } from "../core/errors";
-import { UsersService } from "./users.service";
+import { IUsersService } from "./users.service";
 
-export class TasksService {
-    public constructor(private tasksRepository: IRepository<TaskBusiness.Task>) {}
+export interface ITasksService {
+    create(input: TaskBusiness.ICreate): Promise<TaskBusiness.Task>;
+    findAll(): Promise<TaskBusiness.Task[]>;
+    find(filters: any): Promise<TaskBusiness.Task>;
+    update(userId: number, input: TaskBusiness.IUpdate): Promise<TaskBusiness.Task>;
+    delete(id: number): Promise<void>
+}
+export class TasksService implements ITasksService{
+    public constructor(
+        private tasksRepository: IRepository<TaskBusiness.Task>,
+        private usersService?: IUsersService 
+    ) {
+        this.usersService = usersService;
+    }
     
     public async create(input: TaskBusiness.ICreate): Promise<TaskBusiness.Task> {
-        const usersService = new UsersService(new DataRepository().users());
-        input.user = await usersService.find({ id: input.userId });
-
+        input.user = await this.usersService.find({ id: input.userId });
         const newTask = TaskBusiness.Task.compose(input);
         return this.tasksRepository.create(newTask);
     }
 
-    public async findAll() {
+    public async findAll(): Promise<TaskBusiness.Task[]> {
         return this.tasksRepository.findAll();
     }
 
-    public async find(filters: any) {
+    public async find(filters: any): Promise<TaskBusiness.Task> {
         return this.tasksRepository.find(filters);
     }
 
@@ -28,7 +38,7 @@ export class TasksService {
         return this.find(input.id);
     }
 
-    public async delete(id: string): Promise<void> {
+    public async delete(id: number): Promise<void> {
         await this.tasksRepository.delete(id);
     }
 

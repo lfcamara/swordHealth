@@ -3,8 +3,15 @@ import { UserBusiness } from "../core/entities/user.entity";
 import crypto from 'crypto';
 import { ApplicationError, ErrorTypes } from "../core/errors";
 
-export class UsersService {
-    public constructor(private usersRepository: IRepository<UserBusiness.User>) {}
+export interface IUsersService {
+    create(input: UserBusiness.ICreate): Promise<UserBusiness.User>;
+    findAll(): Promise<UserBusiness.User[]>;
+    find(filters: any): Promise<UserBusiness.User>;
+    update(userId: number, input: UserBusiness.IUpdate): Promise<UserBusiness.User>;
+    delete(id: number): Promise<void>
+}
+export class UsersService implements IUsersService{
+    public constructor(public usersRepository: IRepository<UserBusiness.User>) {}
     
     public async create(input: UserBusiness.ICreate): Promise<UserBusiness.User> {
         const alreadyExists = await this.checkIfUserAlreadyExists(input.username);
@@ -16,11 +23,11 @@ export class UsersService {
         }
     }
 
-    public async findAll() {
+    public async findAll(): Promise<UserBusiness.User[]> {
         return this.usersRepository.findAll();
     }
 
-    public async find(filters: any) {
+    public async find(filters: any): Promise<UserBusiness.User> {
         return this.usersRepository.find(filters);
     }
 
@@ -33,7 +40,7 @@ export class UsersService {
         return updatedUser;
     }
 
-    public async delete(id: string): Promise<void> {
+    public async delete(id: number): Promise<void> {
         await this.usersRepository.delete(id);
     }
 

@@ -7,7 +7,7 @@ export interface IRepository<T> {
     findAll(): Promise<T[]>;
     find(filters: any): Promise<T>;
     update(id: number, input: any);
-    delete(id: string): Promise<void>;
+    delete(id: number): Promise<void>;
 }
 
 export class DataRepository {

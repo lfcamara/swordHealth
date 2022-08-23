@@ -14,10 +14,13 @@ export class AuthController {
     }
 
     static async logout(req: Request, res: Response) {
-        req.session.destroy((err: any) => {
-            res.status(500).json({ message: "Logout Error ", details: err});
-        });
-        
-        res.status(200).json({ message: "Logout Successful "});   
+        try {
+            const authService = new AuthService();
+            authService.logout(req);
+            
+            res.status(200).json({ message: "Logout Successful "});
+        } catch(error: any) {
+            res.status(error.status).json(error);
+        } 
     }
 }

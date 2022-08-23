@@ -21,6 +21,12 @@ export class AuthService {
         }
 
     }
+
+    public logout(req: Request) {
+        req.session.destroy((err: any) => {
+            throw new ApplicationError(ErrorTypes.InternalError());
+        });
+    }
     
     private validatePassword(user: UserBusiness.User, inputPassword: string) {
         const cryptoPassword = crypto.createHash('sha256').update(inputPassword).digest('hex');

@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { DataRepository } from "../core/abstracts/generic.repository";
 import { TaskBusiness } from "../core/entities/taks.entity";
 import { TasksService } from "../services/tasks.service";
+import { UsersService } from "../services/users.service";
 
 export class TasksController {
     static async create(req: Request, res: Response) {
@@ -10,7 +11,10 @@ export class TasksController {
                 userId: req.session.userId,
                 summary: req.body.summary
             };
-            const tasksService = new TasksService(new DataRepository().tasks());
+            const tasksService = new TasksService(
+                new DataRepository().tasks(),
+                new UsersService(new DataRepository().users())
+            );
             const result = await tasksService.create(input);
             delete result.user.password;
             res.status(201).json(result);
@@ -66,7 +70,7 @@ export class TasksController {
     static async delete(req: Request, res: Response) {
         try {
             const tasksService = new TasksService(new DataRepository().tasks());
-            await tasksService.delete(req.params.id);
+            await tasksService.delete(Number(req.params.id));
             res.status(204).send();
         } catch (error: any) {
             res.status(error.status).json(error);
