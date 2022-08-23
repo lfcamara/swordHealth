@@ -30,7 +30,7 @@ export class UsersController {
     static async find(req: Request, res: Response) {
         try {
             const usersService = new UsersService(new DataRepository().users());
-            const result = await usersService.find(Number(req.params.id));
+            const result = await usersService.find({ id: Number(req.params.id)});
             delete result.password;
             
             res.status(200).json(result);

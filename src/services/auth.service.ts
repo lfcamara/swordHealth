@@ -8,10 +8,12 @@ import { UsersService } from './users.service';
 export class AuthService {
     public async login(username: string, password: string, req: Request) {
         try {
+            if(req.sessionID && req.session.userId) throw Error;
             if(username === 'admin' && password === 'admin') {
                 this.composeSession(req);
                 return;
             }
+
             const usersService = new UsersService(new DataRepository().users());
             const user = await usersService.find({ username: username });
             this.validatePassword(user, password);

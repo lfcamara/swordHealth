@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { DataRepository } from "../core/abstracts/generic.repository";
 import { TaskBusiness } from "../core/entities/taks.entity";
+import { NotificationService } from "../services/notification.service";
 import { TasksService } from "../services/tasks.service";
 import { UsersService } from "../services/users.service";
 
@@ -34,6 +35,11 @@ export class TasksController {
             res.status(200).json(result);
         } catch (error: any) {
             res.status(error.status).json(error);
+        } finally {
+            if (req.body.status == TaskBusiness.Status.DONE) {
+                const message = `The tech with id ${req.session.userId} performed the task ${req.params.id} on date ${new Date().toLocaleDateString()}`;
+                NotificationService.sendNotification(message);
+            }
         }
     }
 
@@ -60,7 +66,7 @@ export class TasksController {
     static async findUserTasks(req: Request, res: Response) {
         try {
             const tasksService = new TasksService(new DataRepository().tasks());
-            const result = await tasksService.find({ ownerId: req.session.userId });
+            const result = await tasksService.find({ user: req.session.userId });
             res.send(result);
         } catch (error: any) {
             res.status(error.status).json(error);

@@ -3,7 +3,7 @@ import { TaskBusiness } from "../entities/taks.entity";
 import { UserBusiness } from "../entities/user.entity";
 
 export interface IRepository<T> {
-    create(item: T): Promise <T>;
+    create(item: T): Promise<T>;
     findAll(): Promise<T[]>;
     find(filters: any): Promise<T>;
     update(id: number, input: any);

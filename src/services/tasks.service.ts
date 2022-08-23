@@ -33,9 +33,10 @@ export class TasksService implements ITasksService{
     }
 
     public async update(userId: number, input: TaskBusiness.IUpdate): Promise<TaskBusiness.Task> {
-        await this.checkIfIsSameUser(userId, input.id);
-        await this.tasksRepository.update(userId, input); 
-        return this.find(input.id);
+        const task = await this.checkIfIsSameUser(userId, input.id);
+        input.summary ? task.summary = input.summary : task.status = input.status;
+        
+        return this.tasksRepository.create(task);
     }
 
     public async delete(id: number): Promise<void> {
@@ -43,9 +44,10 @@ export class TasksService implements ITasksService{
     }
 
     async checkIfIsSameUser(userId: number, taskId: number) {
-        const task = await this.find(taskId);
-        if (task.user.id != userId) {
+        const task = await this.find({ id: taskId });
+        if (Number(task.user) != userId) {
             throw new ApplicationError(ErrorTypes.Forbidden());
         }
+        return task;
     }
 }

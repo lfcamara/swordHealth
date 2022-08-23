@@ -50,9 +50,10 @@ describe("Ensure Tasks Service works", () => {
 
     it("should update a task", async() => {
         tasksRepository.find = jest.fn().mockResolvedValue(MOCK_UPDATED_TASK);
+        tasksRepository.create = jest.fn().mockResolvedValue(MOCK_UPDATED_TASK)
 
         const spyCheckUser = jest.spyOn(tasksService, "checkIfIsSameUser");
-        const spyUpdate = jest.spyOn(tasksRepository, "update");
+        const spyUpdate = jest.spyOn(tasksRepository, "create");
         const spyFind = jest.spyOn(tasksRepository, "find");
 
         const result = await tasksService.update(1, UPDATE_INPUT);
@@ -60,12 +61,12 @@ describe("Ensure Tasks Service works", () => {
         expect(spyCheckUser).toHaveBeenCalled();
         expect(spyUpdate).toHaveBeenCalled();
         expect(result).toBe(MOCK_UPDATED_TASK);
-        expect(spyFind).toBeCalledTimes(2);
+        expect(spyFind).toHaveBeenCalled();
     });
 
     it("should not update a task from another user", async() => {
         const spyCheckUser = jest.spyOn(tasksService, "checkIfIsSameUser");
-        const spyUpdate = jest.spyOn(tasksRepository, "update");
+        const spyUpdate = jest.spyOn(tasksRepository, "create");
 
         try {
             await tasksService.update(2, UPDATE_INPUT);
@@ -105,7 +106,7 @@ const MOCK_TASKS_LIST: TaskBusiness.Task[] = [
         id: 1,
         summary: "First Task",
         status: TaskBusiness.Status.DONE,
-        user: MOCK_TECH_USER,
+        user: 1 as unknown as UserBusiness.User,
         createdAt: new Date(),
         updatedAt: new Date() 
     },
@@ -113,7 +114,7 @@ const MOCK_TASKS_LIST: TaskBusiness.Task[] = [
         id: 2,
         summary: "Second Task",
         status: TaskBusiness.Status.TODO,
-        user: MOCK_TECH_USER,
+        user: 1 as unknown as UserBusiness.User,
         createdAt: new Date(),
         updatedAt: new Date() 
     },
@@ -132,7 +133,7 @@ const MOCK_UPDATED_TASK: TaskBusiness.Task = {
     id: 1,
     summary: "Update Task",
     status: TaskBusiness.Status.DONE,
-    user: MOCK_TECH_USER,
+    user: 1 as unknown as UserBusiness.User,
     createdAt: new Date(),
     updatedAt: new Date() 
 }

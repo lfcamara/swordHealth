@@ -17,9 +17,11 @@ class TasksRouter {
             AuthMiddleware.checkPermissions,
             TasksController.findAll
         );
-        this.router.get('/:id', TasksController.find);
-        this.router.get('/', 
-            AuthMiddleware.checkPermissions,
+        this.router.get('/:id', 
+            AuthMiddleware.checkPermissions, 
+            TasksController.find
+        );
+        this.router.get('/',
             TasksController.findUserTasks
         );
         this.router.post('/',
@@ -31,7 +33,8 @@ class TasksRouter {
             body('summary').optional().isString(), 
             body('status').optional().isString(),
             RequestValidation.validateRequest, 
-            TasksController.update);
+            TasksController.update
+        );
         this.router.delete('/:id',
             AuthMiddleware.checkPermissions,
             TasksController.delete
