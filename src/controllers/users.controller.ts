@@ -31,7 +31,9 @@ export class UsersController {
         try {
             const usersService = new UsersService(new DataRepository().users());
             const result = await usersService.find(Number(req.params.id));
-            res.send(result);
+            delete result.password;
+            
+            res.status(200).json(result);
         } catch (error: any) {
             res.status(error.status).json(error);
         }
@@ -41,7 +43,12 @@ export class UsersController {
         try {
             const usersService = new UsersService(new DataRepository().users());
             const result = await usersService.findAll();
-            res.status(200).json(result);
+            const finalResult = result.map((user) => {
+                delete user.password
+                return user;
+            })
+
+            res.status(200).json(finalResult);
         } catch (error: any) {
             res.status(error.status).json(error);
         }
